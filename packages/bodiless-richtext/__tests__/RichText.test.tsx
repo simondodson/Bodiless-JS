@@ -20,7 +20,7 @@ import { Value as SlateEditorValue } from 'slate';
 import { Editor } from 'slate-react';
 import RichText from '../src/RichText';
 
-const getDefaultRichTextItems = () => ([]);
+const getDefaultRichTextItems = () => ({});
 const getRichTextInitialValue = () => ({});
 
 const setupPageEditContext = (isEdit: boolean): PageEditContext => {
@@ -33,11 +33,12 @@ describe('richtext content editable', () => {
   afterEach(() => {
     jest.clearAllMocks();
   });
+  // tslint:disable-next-line: max-line-length
   test('richtext is editable, hover menu and buttons rendered when isEdit enabled in pageEditContext', () => {
     const pageEditContext = setupPageEditContext(true);
     const wrapper = mount(
       <PageEditContext.Provider value={pageEditContext}>
-        <RichText items={getDefaultRichTextItems()} initialValue={getRichTextInitialValue()} />
+        <RichText design={getDefaultRichTextItems()} initialValue={getRichTextInitialValue()} />
       </PageEditContext.Provider>,
     );
     expect(wrapper.find('Editor').props().readOnly).toBe(false);
@@ -56,11 +57,12 @@ describe('richtext content editable', () => {
     expect(PageEditContext.prototype.activate).toHaveBeenCalledTimes(1);
   });
 
+  // tslint:disable-next-line: max-line-length
   test('richtext is not editable, hover menu and buttons are not rendered when isEdit disabled in pageEditContext', () => {
     const pageEditContext = setupPageEditContext(false);
     const wrapper = mount(
       <PageEditContext.Provider value={pageEditContext}>
-        <RichText items={getDefaultRichTextItems()} initialValue={getRichTextInitialValue()} />
+        <RichText design={getDefaultRichTextItems()} initialValue={getRichTextInitialValue()} />
       </PageEditContext.Provider>,
     );
 

@@ -12,34 +12,10 @@
  * limitations under the License.
  */
 
-import React, { ComponentType } from 'react';
 import { flow } from 'lodash';
 import { RichText } from '@bodiless/richtext-ui';
 import {
-  withComponent,
-  withBoldMeta,
-  withItalicMeta,
-  withUnderlineMeta,
-  withAlignRightMeta,
-  withAlignCenterMeta,
-  withAlignJustifyMeta,
-  withAlignLeftMeta,
-  withHeader3Meta,
-  withHeader2Meta,
-  withHeader1Meta,
-  withSuperScriptMeta,
-  withLinkMeta,
-} from '@bodiless/richtext';
-import {
-  H2,
-  H3,
-  Div,
-  Strong,
-  Em,
-  H1,
-  Sup,
-  Span,
-  A,
+  withDesign, addClasses,
 } from '@bodiless/fclasses';
 import {
   asBold,
@@ -58,35 +34,31 @@ import {
 } from '../Elements.token';
 import asEditor from './asEditor';
 
-const withItems = (items: any[]) => <P extends object> (Component:ComponentType<P>) => (
-  (props:P) => (
-    <Component items={items} {...props} />
-  )
-);
-const itemsSimple = [
-  flow(withComponent(asSuperScript(Sup)), withSuperScriptMeta),
-];
-const itemsBasic = [
-  flow(withComponent(asBold(Strong)), withBoldMeta),
-  flow(withComponent(asItalic(Em)), withItalicMeta),
-  flow(withComponent(asUnderline(Span)), withUnderlineMeta),
-  flow(withComponent(asEditableLink()(asLink(A))), withLinkMeta),
-  ...itemsSimple,
-  flow(withComponent(asAlignLeft(Div)), withAlignLeftMeta),
-  flow(withComponent(asAlignRight(Div)), withAlignRightMeta),
-  flow(withComponent(asAlignJustify(Div)), withAlignJustifyMeta),
-  flow(withComponent(asAlignCenter(Div)), withAlignCenterMeta),
-];
+const simpleDesign = {
+  SuperScript: asSuperScript,
+};
+const basicDesign = {
+  Bold: asBold,
+  Italic: asItalic,
+  Underline: asUnderline,
+  Link: flow(asEditableLink(), asLink),
+  ...simpleDesign,
+  RedText: addClasses('text-red-500'),
+  AlignLeft: asAlignLeft,
+  AlignRight: asAlignRight,
+  AlignJustify: asAlignJustify,
+  AlignCenter: asAlignCenter,
+};
+const fullFeaturedDesign = {
+  ...basicDesign,
+  H1: asHeader1,
+  H2: asHeader2,
+  H3: asHeader3,
+};
 
-const itemsFullFeatured = [
-  ...itemsBasic,
-  flow(withComponent(asHeader1(H1)), withHeader1Meta),
-  flow(withComponent(asHeader2(H2)), withHeader2Meta),
-  flow(withComponent(asHeader3(H3)), withHeader3Meta),
-];
-const EditorSimple = withItems(itemsSimple)(RichText);
-const EditorBasic = withItems(itemsBasic)(RichText);
-const EditorFullFeatured = withItems(itemsFullFeatured)(RichText);
+const EditorSimple = withDesign(simpleDesign)(RichText);
+const EditorBasic = withDesign(basicDesign)(RichText);
+const EditorFullFeatured = withDesign(fullFeaturedDesign)(RichText);
 const asEditorBasic = asEditor(EditorBasic);
 const asEditorSimple = asEditor(EditorSimple);
 const asEditorFullFeatured = asEditor(EditorFullFeatured);
