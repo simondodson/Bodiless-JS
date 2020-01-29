@@ -58,7 +58,7 @@ export const getCurrentGitBranch = async (): Promise<string> => {
     const repo = await getGitRepository(gitDir);
     const currentBranch: Reference = await handleDetachedState(repo).getCurrentBranch();
 
-    if (currentBranch ) {
+    if (currentBranch) {
       gitBranchName = currentBranch.shorthand() as string;
     }
   } catch (e) {
